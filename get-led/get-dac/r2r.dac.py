@@ -1,0 +1,41 @@
+import RPi.GPIO as GPIO
+'''GPIO.setmode(GPIO.BCM)
+leds = [16, 20, 21, 25, 26, 17, 27, 22]
+diap = 3.3'''
+
+class R2R_DAC:
+    def __init__(self, leds, diap, verbose = False):
+        self.gpio_bits = leds
+        self.diap= diap
+        self.verbose = verbose
+
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(self.gpio_bits, GPIO.OUT, initial = 0)
+
+    def dinit(self):
+        GPIO.output(self.gpio_bits, 0)
+        GPIO.cleanup()
+
+    def v(self, vol):
+        if 0 <= vol <= self.diap:
+            return int(vol/self.diap * 255)
+        else:
+            print('ОШИБКА')
+            return 0
+    def outi(self, a):
+        x = [int(i) for i in bin(a)[2:].zfill(8)]
+        print(x)
+        GPIO.output(self.gpio_bits, x)
+if __name__ == "__main__":
+    try:
+        dac = R2R_DAC([16, 20, 21, 25, 26, 17, 27, 22], 3.3, True)
+
+        while True:
+            print('vvedite napryazhenie')
+            vol = float(input())
+            print(vol)
+            vol1 = dac.v(vol)
+            dac.outi(vol1)
+
+    finally:
+        dac.dinit()
