@@ -1,5 +1,6 @@
 import signal_generator as sg
 import time
+import RPi.GPIO as GPIO
 
 ampl = 3.2
 sig_freq = 10
@@ -33,7 +34,7 @@ try:
     while True:
         sg.wait_for_sampling_period(samp_freq)
         t = time.perf_counter()
-        vol = ampl * sg.det_sin_wave_amplitude(sig_freq, t)
+        vol = ampl * sg.timevoltage(sig_freq, t)
         vol1 = dac.v(vol)
         dac.outi(vol1)
 finally:
