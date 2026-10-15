@@ -1,9 +1,10 @@
 import signal_generator as sg
 import time
+import RPi.GPIO as GPIO
 
 ampl = 3.2
-sig_freq = 10
-samp_freq = 1000
+sig_freq = 1000
+samp_freq = 1000000
 
 try:
     class R2R_DAC:
@@ -27,7 +28,7 @@ try:
                 return 0
         def outi(self, a):
             x = [int(i) for i in bin(a)[2:].zfill(8)]
-            print(x)
+            '''print(x)'''
             GPIO.output(self.gpio_bits, x)
     dac = R2R_DAC([16, 20, 21, 25, 26, 17, 27, 22], 3.3, True)
     while True:
